@@ -1,0 +1,65 @@
+// Links
+// https://stackoverflow.com/questions/951791/javascript-global-event-mechanism
+// https://stackoverflow.com/a/49560222/3068360
+// https://stackoverflow.com/questions/5328154/catch-all-javascript-errors-and-send-them-to-server
+
+var exception_report_url = "<%= RailsClientsideJavascriptErrorHandler.request_endpoint %>";
+
+
+window.addEventListener('error', function(event) {
+  // Instead of window.onerror we use addEventListener with capture option set to true to get the most errors
+  // window.onerror = function(message, file, line, col, error){
+  // https://stackoverflow.com/q/54209739/3068360
+  
+  // https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onerror
+  // event is type of https://developer.mozilla.org/en-US/docs/Web/API/ErrorEvent
+
+  $.ajax({
+    url: exception_report_url,
+    dataType: 'json',
+    method: "<%= RailsClientsideJavascriptErrorHandler.request_method %>",
+    data: {
+      name: event.message,
+      message: ((event.error && event.error.message) || event.message), 
+      url: document.location.href,
+      user_agent: navigator.userAgent,
+      stacktrace: (event.error && event.error.stack), // stacktrace contains info about file, line, and col so no need to send those
+    }
+  }).done(function(){
+    //console.log("Successfully sent error");
+  });
+
+  if(typeof ga !== 'undefined'){
+    // Google Analytics
+    ga('send', 'event', 'window.onerror', msg, navigator.userAgent);
+  }
+  
+  console.log('error');
+}, true); // use true for capture option so that all errors are caught
+
+
+window.addEventListener('unhandledrejection', function(e){  
+  // https://developer.mozilla.org/en-US/docs/Web/API/Window/unhandledrejection_event
+  
+  $.ajax({
+    url: exception_report_url,
+    dataType: 'json',
+    method: 'post',
+    data: {
+      //name: ,
+      name: "<%= RailsClientsideJavascriptErrorHandler.unhandledrejection_name %>",
+      message: e.reason, 
+      url: document.location.href,
+      user_agent: navigator.userAgent,
+    }
+  }).done(function(){
+    //console.log("Successfully sent error");
+  });
+
+  if(typeof ga !== 'undefined'){
+    // Google Analytics
+    ga('send', 'event', 'window.unhandledrejection', e.reason, navigator.userAgent);
+  }
+
+  console.log('unhandledrejection');
+}, true); // use true for capture option so that all errors are caught

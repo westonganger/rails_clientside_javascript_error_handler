@@ -1,0 +1,2084 @@
+  [1m[35m (1.8ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to SetUpTestTables (20210128155312)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "posts" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "a" integer, "b" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "comments" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "content" varchar, "post_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_comments_on_post_id" ON "comments" ("post_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "notes" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "body" varchar, "post_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_notes_on_post_id" ON "notes" ("post_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20210128155312"]]
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateSnapshotsTables (20210306100122)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "snapshots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "item_type" varchar NOT NULL, "item_id" integer NOT NULL, "identifier" varchar NOT NULL, "user_type" varchar, "user_id" integer, "metadata" text, "created_at" datetime NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_snapshots_on_item" ON "snapshots" ("item_type", "item_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_snapshots_on_identifier" ON "snapshots" ("identifier")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_snapshots_on_user" ON "snapshots" ("user_type", "user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "snapshot_items" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "snapshot_id" integer NOT NULL, "item_type" varchar NOT NULL, "item_id" integer NOT NULL, "object" text NOT NULL, "created_at" datetime NOT NULL, "child_group_name" varchar)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_snapshot_items_on_snapshot_id" ON "snapshot_items" ("snapshot_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_snapshot_items_on_item" ON "snapshot_items" ("item_type", "item_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES (?)[0m  [["version", "20210306100122"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "test"], ["created_at", "2021-08-19 23:28:07.589659"], ["updated_at", "2021-08-19 23:28:07.589659"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[31mDELETE FROM posts;[0m
+  [1m[35m (0.1ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'posts';[0m
+  [1m[35m (0.7ms)[0m  [1m[31mDELETE FROM snapshots;[0m
+  [1m[35m (0.1ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshots';[0m
+  [1m[35m (0.7ms)[0m  [1m[31mDELETE FROM snapshot_items;[0m
+  [1m[35m (0.1ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshot_items';[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."a" = ? AND "posts"."b" = ? LIMIT ?[0m  [["a", 1], ["b", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.3ms)[0m  [1m[32mINSERT INTO "posts" ("a", "b", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["a", 1], ["b", 3], ["created_at", "2021-08-19 23:28:07.601363"], ["updated_at", "2021-08-19 23:28:07.601363"]]
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:07.616280"]]
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.3ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,1,'Post',1,'---
+id: 1
+a: 1
+b: 3
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-19 23:28:07.601363000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:07.601363000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-19 23:28:07.601363000 Z
+','2021-08-19 23:28:07.639023',NULL)[0m
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Update (0.8ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 2], ["b", 4], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:07.643299"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.3ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,2,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-19 23:28:07.601363000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:07.601363000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-19 23:28:07.601363000 Z
+','2021-08-19 23:28:07.646425',NULL)[0m
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+ActiveSnapshotTest: test_exposes_main_module
+--------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+ActiveSnapshotTest: test_exposes_version
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+ActiveSnapshotTest: test_snapshot_lifecycle
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.2ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:28:07.688491"], ["updated_at", "2021-08-19 23:28:07.688491"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "snapshot-1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.2ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "snapshot-1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:07.691182"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.601363000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:07.601363000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.601363000 Z
+  zone: *1
+  time: 2021-08-19 23:28:07.601363000 Z
+','2021-08-19 23:28:07.694320',NULL),(NULL,3,'Comment',1,'---
+id: 1
+content: foo
+post_id: 1
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.688491000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:07.688491000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.688491000 Z
+  zone: *1
+  time: 2021-08-19 23:28:07.688491000 Z
+','2021-08-19 23:28:07.694320','comments')[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-20 23:28:07.695499"], ["id", 1]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-20 23:28:07.695924"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:28:07.696917"], ["updated_at", "2021-08-19 23:28:07.696917"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "bar"], ["post_id", 1], ["created_at", "2021-08-19 23:28:07.697739"], ["updated_at", "2021-08-19 23:28:07.697739"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 3]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 2]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 3]]
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-19 23:28:07.601363"], ["id", 1]]
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id", "content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["id", 1], ["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:28:07.688491"], ["updated_at", "2021-08-19 23:28:07.688491"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots" WHERE "snapshots"."identifier" = ?[0m  [["identifier", "snapshot-1"]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------
+SnapshotTest: test_restore
+--------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mPost Update (0.2ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_build_snapshot_item
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_fetch_reified_items
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------
+SnapshotTest: test_validations
+------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.2ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" IS NULL AND "snapshots"."item_id" IS NULL AND "snapshots"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "random"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------
+SnapshotTest: test_metadata
+---------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------
+SnapshotTest: test_relationships
+--------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_relationships
+------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------
+SnapshotItemTest: test_validations
+----------------------------------
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Post"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Foobar"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Foobar"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------
+SnapshotItemTest: test_object
+-----------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_restore_item!
+------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Update (0.2ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------
+SnapshotsConcernTest: test_has_snapshot_children
+------------------------------------------------
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+SnapshotsConcernTest: test_relationships
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+SnapshotsConcernTest: test_create_snapshot!
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 1"], ["metadata", "---\n:foo: :bar\n"], ["created_at", "2021-08-19 23:28:07.754325"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.601363000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:07.601363000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.601363000 Z
+  zone: *1
+  time: 2021-08-19 23:28:07.601363000 Z
+','2021-08-19 23:28:07.757455',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:07.759398"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,4,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.601363000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:07.601363000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.601363000 Z
+  zone: *1
+  time: 2021-08-19 23:28:07.601363000 Z
+','2021-08-19 23:28:07.762080',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 3"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:07.764341"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,5,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.601363000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:07.601363000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:07.601363000 Z
+  zone: *1
+  time: 2021-08-19 23:28:07.601363000 Z
+','2021-08-19 23:28:07.767417',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------
+InstallGeneratorTest: test_should_add_migration
+-----------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (1.9ms)[0m  [1m[31mDELETE FROM posts;[0m
+  [1m[35m (1.4ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'posts';[0m
+  [1m[35m (1.2ms)[0m  [1m[31mDELETE FROM snapshots;[0m
+  [1m[35m (1.1ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshots';[0m
+  [1m[35m (1.0ms)[0m  [1m[31mDELETE FROM snapshot_items;[0m
+  [1m[35m (1.0ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshot_items';[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."a" = ? AND "posts"."b" = ? LIMIT ?[0m  [["a", 1], ["b", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.3ms)[0m  [1m[32mINSERT INTO "posts" ("a", "b", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["a", 1], ["b", 3], ["created_at", "2021-08-19 23:28:46.603059"], ["updated_at", "2021-08-19 23:28:46.603059"]]
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:46.616208"]]
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,1,'Post',1,'---
+id: 1
+a: 1
+b: 3
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-19 23:28:46.603059000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:46.603059000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-19 23:28:46.603059000 Z
+','2021-08-19 23:28:46.631882',NULL)[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Update (0.7ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 2], ["b", 4], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:46.635496"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.3ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,2,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-19 23:28:46.603059000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:46.603059000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-19 23:28:46.603059000 Z
+','2021-08-19 23:28:46.638687',NULL)[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+ActiveSnapshotTest: test_exposes_version
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+ActiveSnapshotTest: test_snapshot_lifecycle
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.2ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:28:46.668148"], ["updated_at", "2021-08-19 23:28:46.668148"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "snapshot-1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "snapshot-1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:46.670427"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.603059000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:46.603059000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.603059000 Z
+  zone: *1
+  time: 2021-08-19 23:28:46.603059000 Z
+','2021-08-19 23:28:46.672991',NULL),(NULL,3,'Comment',1,'---
+id: 1
+content: foo
+post_id: 1
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.668148000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:46.668148000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.668148000 Z
+  zone: *1
+  time: 2021-08-19 23:28:46.668148000 Z
+','2021-08-19 23:28:46.672991','comments')[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-20 23:28:46.673978"], ["id", 1]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-20 23:28:46.674338"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:28:46.675175"], ["updated_at", "2021-08-19 23:28:46.675175"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "bar"], ["post_id", 1], ["created_at", "2021-08-19 23:28:46.675840"], ["updated_at", "2021-08-19 23:28:46.675840"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 3]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 2]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 3]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-19 23:28:46.603059"], ["id", 1]]
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id", "content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["id", 1], ["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:28:46.668148"], ["updated_at", "2021-08-19 23:28:46.668148"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots" WHERE "snapshots"."identifier" = ?[0m  [["identifier", "snapshot-1"]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+ActiveSnapshotTest: test_exposes_main_module
+--------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_fetch_reified_items
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.2ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------
+SnapshotTest: test_relationships
+--------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------
+SnapshotTest: test_validations
+------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.2ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" IS NULL AND "snapshots"."item_id" IS NULL AND "snapshots"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "random"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------
+SnapshotTest: test_metadata
+---------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------
+SnapshotTest: test_restore
+--------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mPost Update (0.3ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_build_snapshot_item
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------
+InstallGeneratorTest: test_should_add_migration
+-----------------------------------------------
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------
+SnapshotsConcernTest: test_has_snapshot_children
+------------------------------------------------
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+SnapshotsConcernTest: test_relationships
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+SnapshotsConcernTest: test_create_snapshot!
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 1"], ["metadata", "---\n:foo: :bar\n"], ["created_at", "2021-08-19 23:28:46.720422"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.603059000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:46.603059000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.603059000 Z
+  zone: *1
+  time: 2021-08-19 23:28:46.603059000 Z
+','2021-08-19 23:28:46.723268',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:46.725154"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,4,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.603059000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:46.603059000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.603059000 Z
+  zone: *1
+  time: 2021-08-19 23:28:46.603059000 Z
+','2021-08-19 23:28:46.727906',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 3"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:28:46.729775"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,5,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.603059000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:28:46.603059000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:28:46.603059000 Z
+  zone: *1
+  time: 2021-08-19 23:28:46.603059000 Z
+','2021-08-19 23:28:46.732939',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------
+SnapshotItemTest: test_object
+-----------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------
+SnapshotItemTest: test_validations
+----------------------------------
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Post"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Foobar"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Foobar"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_restore_item!
+------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Update (0.3ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_relationships
+------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (1.9ms)[0m  [1m[31mDELETE FROM posts;[0m
+  [1m[35m (1.3ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'posts';[0m
+  [1m[35m (1.2ms)[0m  [1m[31mDELETE FROM snapshots;[0m
+  [1m[35m (1.0ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshots';[0m
+  [1m[35m (1.1ms)[0m  [1m[31mDELETE FROM snapshot_items;[0m
+  [1m[35m (1.0ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshot_items';[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."a" = ? AND "posts"."b" = ? LIMIT ?[0m  [["a", 1], ["b", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.3ms)[0m  [1m[32mINSERT INTO "posts" ("a", "b", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["a", 1], ["b", 3], ["created_at", "2021-08-19 23:29:11.308109"], ["updated_at", "2021-08-19 23:29:11.308109"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.2ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:11.320795"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,1,'Post',1,'---
+id: 1
+a: 1
+b: 3
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-19 23:29:11.308109000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:11.308109000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-19 23:29:11.308109000 Z
+','2021-08-19 23:29:11.336271',NULL)[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Update (0.6ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 2], ["b", 4], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.2ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:11.339527"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,2,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-19 23:29:11.308109000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:11.308109000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-19 23:29:11.308109000 Z
+','2021-08-19 23:29:11.342050',NULL)[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------
+SnapshotTest: test_validations
+------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" IS NULL AND "snapshots"."item_id" IS NULL AND "snapshots"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "random"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------
+SnapshotTest: test_metadata
+---------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------
+SnapshotTest: test_relationships
+--------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------
+SnapshotTest: test_restore
+--------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.0ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mPost Update (0.2ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_fetch_reified_items
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_build_snapshot_item
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.0ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+ActiveSnapshotTest: test_snapshot_lifecycle
+-------------------------------------------
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.2ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:29:11.384159"], ["updated_at", "2021-08-19 23:29:11.384159"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "snapshot-1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "snapshot-1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:11.386301"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.308109000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:11.308109000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.308109000 Z
+  zone: *1
+  time: 2021-08-19 23:29:11.308109000 Z
+','2021-08-19 23:29:11.389012',NULL),(NULL,3,'Comment',1,'---
+id: 1
+content: foo
+post_id: 1
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.384159000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:11.384159000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.384159000 Z
+  zone: *1
+  time: 2021-08-19 23:29:11.384159000 Z
+','2021-08-19 23:29:11.389012','comments')[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-20 23:29:11.390035"], ["id", 1]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-20 23:29:11.390390"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:29:11.391260"], ["updated_at", "2021-08-19 23:29:11.391260"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.0ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "bar"], ["post_id", 1], ["created_at", "2021-08-19 23:29:11.391968"], ["updated_at", "2021-08-19 23:29:11.391968"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 3]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 2]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 3]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-19 23:29:11.308109"], ["id", 1]]
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id", "content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["id", 1], ["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:29:11.384159"], ["updated_at", "2021-08-19 23:29:11.384159"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots" WHERE "snapshots"."identifier" = ?[0m  [["identifier", "snapshot-1"]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+ActiveSnapshotTest: test_exposes_version
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+ActiveSnapshotTest: test_exposes_main_module
+--------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_relationships
+------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_restore_item!
+------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Update (0.2ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------
+SnapshotItemTest: test_validations
+----------------------------------
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Load (0.0ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Post"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Foobar"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Foobar"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------
+SnapshotItemTest: test_object
+-----------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+SnapshotsConcernTest: test_create_snapshot!
+-------------------------------------------
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 1"], ["metadata", "---\n:foo: :bar\n"], ["created_at", "2021-08-19 23:29:11.411538"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.308109000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:11.308109000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.308109000 Z
+  zone: *1
+  time: 2021-08-19 23:29:11.308109000 Z
+','2021-08-19 23:29:11.413742',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:11.415146"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,4,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.308109000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:11.308109000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.308109000 Z
+  zone: *1
+  time: 2021-08-19 23:29:11.308109000 Z
+','2021-08-19 23:29:11.417040',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 3"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:11.418345"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,5,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.308109000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:11.308109000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:11.308109000 Z
+  zone: *1
+  time: 2021-08-19 23:29:11.308109000 Z
+','2021-08-19 23:29:11.420235',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------
+SnapshotsConcernTest: test_has_snapshot_children
+------------------------------------------------
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+SnapshotsConcernTest: test_relationships
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------
+InstallGeneratorTest: test_should_add_migration
+-----------------------------------------------
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (1.4ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (1.8ms)[0m  [1m[31mDELETE FROM posts;[0m
+  [1m[35m (1.2ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'posts';[0m
+  [1m[35m (1.1ms)[0m  [1m[31mDELETE FROM snapshots;[0m
+  [1m[35m (0.9ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshots';[0m
+  [1m[35m (0.9ms)[0m  [1m[31mDELETE FROM snapshot_items;[0m
+  [1m[35m (0.9ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshot_items';[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."a" = ? AND "posts"."b" = ? LIMIT ?[0m  [["a", 1], ["b", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.3ms)[0m  [1m[32mINSERT INTO "posts" ("a", "b", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["a", 1], ["b", 3], ["created_at", "2021-08-19 23:29:21.079132"], ["updated_at", "2021-08-19 23:29:21.079132"]]
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:21.092194"]]
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,1,'Post',1,'---
+id: 1
+a: 1
+b: 3
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-19 23:29:21.079132000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:21.079132000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-19 23:29:21.079132000 Z
+','2021-08-19 23:29:21.107905',NULL)[0m
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Update (1.0ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 2], ["b", 4], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.4ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:21.113375"]]
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.3ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,2,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-19 23:29:21.079132000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:21.079132000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-19 23:29:21.079132000 Z
+','2021-08-19 23:29:21.117615',NULL)[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+ActiveSnapshotTest: test_exposes_version
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+ActiveSnapshotTest: test_snapshot_lifecycle
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.2ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:29:21.148886"], ["updated_at", "2021-08-19 23:29:21.148886"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "snapshot-1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "snapshot-1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:21.151063"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.079132000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:21.079132000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.079132000 Z
+  zone: *1
+  time: 2021-08-19 23:29:21.079132000 Z
+','2021-08-19 23:29:21.153591',NULL),(NULL,3,'Comment',1,'---
+id: 1
+content: foo
+post_id: 1
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.148886000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:21.148886000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.148886000 Z
+  zone: *1
+  time: 2021-08-19 23:29:21.148886000 Z
+','2021-08-19 23:29:21.153591','comments')[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-20 23:29:21.154558"], ["id", 1]]
+  [1m[36mPost Update (0.0ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-20 23:29:21.154916"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:29:21.155758"], ["updated_at", "2021-08-19 23:29:21.155758"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.0ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "bar"], ["post_id", 1], ["created_at", "2021-08-19 23:29:21.156425"], ["updated_at", "2021-08-19 23:29:21.156425"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 3]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 2]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 3]]
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-19 23:29:21.079132"], ["id", 1]]
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id", "content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["id", 1], ["content", "foo"], ["post_id", 1], ["created_at", "2021-08-19 23:29:21.148886"], ["updated_at", "2021-08-19 23:29:21.148886"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots" WHERE "snapshots"."identifier" = ?[0m  [["identifier", "snapshot-1"]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+ActiveSnapshotTest: test_exposes_main_module
+--------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------
+SnapshotsConcernTest: test_has_snapshot_children
+------------------------------------------------
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+SnapshotsConcernTest: test_create_snapshot!
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 1"], ["metadata", "---\n:foo: :bar\n"], ["created_at", "2021-08-19 23:29:21.176506"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.079132000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:21.079132000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.079132000 Z
+  zone: *1
+  time: 2021-08-19 23:29:21.079132000 Z
+','2021-08-19 23:29:21.179444',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:21.182276"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,4,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.079132000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:21.079132000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.079132000 Z
+  zone: *1
+  time: 2021-08-19 23:29:21.079132000 Z
+','2021-08-19 23:29:21.185087',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 3"], ["metadata", "--- {}\n"], ["created_at", "2021-08-19 23:29:21.186765"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,5,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.079132000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-19 23:29:21.079132000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-19 23:29:21.079132000 Z
+  zone: *1
+  time: 2021-08-19 23:29:21.079132000 Z
+','2021-08-19 23:29:21.189732',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+SnapshotsConcernTest: test_relationships
+----------------------------------------
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------
+InstallGeneratorTest: test_should_add_migration
+-----------------------------------------------
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_fetch_reified_items
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------
+SnapshotTest: test_relationships
+--------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_build_snapshot_item
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------
+SnapshotTest: test_restore
+--------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mPost Update (0.3ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------
+SnapshotTest: test_validations
+------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.2ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" IS NULL AND "snapshots"."item_id" IS NULL AND "snapshots"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "random"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------
+SnapshotTest: test_metadata
+---------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------
+SnapshotItemTest: test_object
+-----------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------
+SnapshotItemTest: test_validations
+----------------------------------
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Post"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Foobar"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Foobar"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_relationships
+------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_restore_item!
+------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Update (0.2ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (2.4ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.3ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (1.2ms)[0m  [1m[31mDELETE FROM posts;[0m
+  [1m[35m (1.3ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'posts';[0m
+  [1m[35m (3.1ms)[0m  [1m[31mDELETE FROM snapshots;[0m
+  [1m[35m (0.7ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshots';[0m
+  [1m[35m (1.8ms)[0m  [1m[31mDELETE FROM snapshot_items;[0m
+  [1m[35m (0.7ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshot_items';[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."a" = ? AND "posts"."b" = ? LIMIT ?[0m  [["a", 1], ["b", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("a", "b", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["a", 1], ["b", 3], ["created_at", "2021-08-27 20:45:59.108921"], ["updated_at", "2021-08-27 20:45:59.108921"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:45:59.125328"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.5ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.6ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.3ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,1,'Post',1,'---
+id: 1
+a: 1
+b: 3
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-27 20:45:59.108921000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:45:59.108921000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-27 20:45:59.108921000 Z
+','2021-08-27 20:45:59.147514',NULL)[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Update (0.8ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 2], ["b", 4], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:45:59.151704"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.3ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,2,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-27 20:45:59.108921000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:45:59.108921000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-27 20:45:59.108921000 Z
+','2021-08-27 20:45:59.154831',NULL)[0m
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+SnapshotsConcernTest: test_create_snapshot!
+-------------------------------------------
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (1.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 1"], ["metadata", "---\n:foo: :bar\n"], ["created_at", "2021-08-27 20:45:59.199189"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.108921000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:45:59.108921000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.108921000 Z
+  zone: *1
+  time: 2021-08-27 20:45:59.108921000 Z
+','2021-08-27 20:45:59.203510',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:45:59.205310"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,4,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.108921000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:45:59.108921000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.108921000 Z
+  zone: *1
+  time: 2021-08-27 20:45:59.108921000 Z
+','2021-08-27 20:45:59.207556',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 3"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:45:59.209081"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,5,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.108921000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:45:59.108921000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.108921000 Z
+  zone: *1
+  time: 2021-08-27 20:45:59.108921000 Z
+','2021-08-27 20:45:59.211345',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+SnapshotsConcernTest: test_relationships
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------
+SnapshotsConcernTest: test_has_snapshot_children
+------------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_relationships
+------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------
+SnapshotItemTest: test_validations
+----------------------------------
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Post"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Foobar"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Foobar"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------
+SnapshotItemTest: test_object
+-----------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_restore_item!
+------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Update (0.2ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------
+InstallGeneratorTest: test_should_add_migration
+-----------------------------------------------
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+ActiveSnapshotTest: test_snapshot_lifecycle
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.3ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-27 20:45:59.248858"], ["updated_at", "2021-08-27 20:45:59.248858"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "snapshot-1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.2ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "snapshot-1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:45:59.251463"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.108921000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:45:59.108921000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.108921000 Z
+  zone: *1
+  time: 2021-08-27 20:45:59.108921000 Z
+','2021-08-27 20:45:59.254446',NULL),(NULL,3,'Comment',1,'---
+id: 1
+content: foo
+post_id: 1
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.248858000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:45:59.248858000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:45:59.248858000 Z
+  zone: *1
+  time: 2021-08-27 20:45:59.248858000 Z
+','2021-08-27 20:45:59.254446','comments')[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-28 20:45:59.255601"], ["id", 1]]
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-28 20:45:59.256049"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-27 20:45:59.257086"], ["updated_at", "2021-08-27 20:45:59.257086"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "bar"], ["post_id", 1], ["created_at", "2021-08-27 20:45:59.257919"], ["updated_at", "2021-08-27 20:45:59.257919"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 3]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 2]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 3]]
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-27 20:45:59.108921"], ["id", 1]]
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id", "content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["id", 1], ["content", "foo"], ["post_id", 1], ["created_at", "2021-08-27 20:45:59.248858"], ["updated_at", "2021-08-27 20:45:59.248858"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots" WHERE "snapshots"."identifier" = ?[0m  [["identifier", "snapshot-1"]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+ActiveSnapshotTest: test_exposes_main_module
+--------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+ActiveSnapshotTest: test_exposes_version
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_build_snapshot_item
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_fetch_reified_items
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------
+SnapshotTest: test_restore
+--------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mPost Update (0.3ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------
+SnapshotTest: test_metadata
+---------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------
+SnapshotTest: test_relationships
+--------------------------------
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------
+SnapshotTest: test_validations
+------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.2ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" IS NULL AND "snapshots"."item_id" IS NULL AND "snapshots"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "random"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (1.4ms)[0m  [1m[31mDELETE FROM posts;[0m
+  [1m[35m (0.8ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'posts';[0m
+  [1m[35m (0.8ms)[0m  [1m[31mDELETE FROM snapshots;[0m
+  [1m[35m (0.6ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshots';[0m
+  [1m[35m (0.9ms)[0m  [1m[31mDELETE FROM snapshot_items;[0m
+  [1m[35m (0.7ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshot_items';[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."a" = ? AND "posts"."b" = ? LIMIT ?[0m  [["a", 1], ["b", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("a", "b", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["a", 1], ["b", 3], ["created_at", "2021-08-27 20:46:32.110903"], ["updated_at", "2021-08-27 20:46:32.110903"]]
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:46:32.123411"]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (1.4ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (1.2ms)[0m  [1m[31mDELETE FROM posts;[0m
+  [1m[35m (0.7ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'posts';[0m
+  [1m[35m (0.8ms)[0m  [1m[31mDELETE FROM snapshots;[0m
+  [1m[35m (0.7ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshots';[0m
+  [1m[35m (0.8ms)[0m  [1m[31mDELETE FROM snapshot_items;[0m
+  [1m[35m (0.1ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshot_items';[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."a" = ? AND "posts"."b" = ? LIMIT ?[0m  [["a", 1], ["b", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("a", "b", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["a", 1], ["b", 3], ["created_at", "2021-08-27 20:46:36.394557"], ["updated_at", "2021-08-27 20:46:36.394557"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:46:36.407070"]]
+  [1m[36mTRANSACTION (0.8ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (1.5ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[35m (1.3ms)[0m  [1m[31mDELETE FROM posts;[0m
+  [1m[35m (0.7ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'posts';[0m
+  [1m[35m (0.7ms)[0m  [1m[31mDELETE FROM snapshots;[0m
+  [1m[35m (0.7ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshots';[0m
+  [1m[35m (0.7ms)[0m  [1m[31mDELETE FROM snapshot_items;[0m
+  [1m[35m (0.1ms)[0m  [1m[33mUPDATE `sqlite_sequence` SET `seq` = 0 WHERE `name` = 'snapshot_items';[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."a" = ? AND "posts"."b" = ? LIMIT ?[0m  [["a", 1], ["b", 3], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mPost Create (0.2ms)[0m  [1m[32mINSERT INTO "posts" ("a", "b", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["a", 1], ["b", 3], ["created_at", "2021-08-27 20:46:45.337718"], ["updated_at", "2021-08-27 20:46:45.337718"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.2ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:46:45.350182"]]
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.1ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT sqlite_version(*)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,1,'Post',1,'---
+id: 1
+a: 1
+b: 3
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-27 20:46:45.337718000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:46:45.337718000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-27 20:46:45.337718000 Z
+','2021-08-27 20:46:45.366180',NULL)[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Update (0.7ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 2], ["b", 4], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.2ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "v2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:46:45.369589"]]
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,2,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: &1 2021-08-27 20:46:45.337718000 Z
+  zone: &2 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:46:45.337718000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: *1
+  zone: *2
+  time: 2021-08-27 20:46:45.337718000 Z
+','2021-08-27 20:46:45.372362',NULL)[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------
+InstallGeneratorTest: test_should_add_migration
+-----------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------
+SnapshotTest: test_relationships
+--------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------
+SnapshotTest: test_restore
+--------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.1ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mPost Update (0.2ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_build_snapshot_item
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------
+SnapshotTest: test_validations
+------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" IS NULL AND "snapshots"."item_id" IS NULL AND "snapshots"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "v1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "random"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+SnapshotTest: test_fetch_reified_items
+--------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------
+SnapshotTest: test_metadata
+---------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+ActiveSnapshotTest: test_exposes_main_module
+--------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+ActiveSnapshotTest: test_exposes_version
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+ActiveSnapshotTest: test_snapshot_lifecycle
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.3ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-27 20:46:45.427588"], ["updated_at", "2021-08-27 20:46:45.427588"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "snapshot-1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.2ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "snapshot-1"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:46:45.430393"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.337718000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:46:45.337718000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.337718000 Z
+  zone: *1
+  time: 2021-08-27 20:46:45.337718000 Z
+','2021-08-27 20:46:45.433489',NULL),(NULL,3,'Comment',1,'---
+id: 1
+content: foo
+post_id: 1
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.427588000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:46:45.427588000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.427588000 Z
+  zone: *1
+  time: 2021-08-27 20:46:45.427588000 Z
+','2021-08-27 20:46:45.433489','comments')[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-28 20:46:45.434798"], ["id", 1]]
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-28 20:46:45.435324"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "foo"], ["post_id", 1], ["created_at", "2021-08-27 20:46:45.436673"], ["updated_at", "2021-08-27 20:46:45.436673"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["content", "bar"], ["post_id", 1], ["created_at", "2021-08-27 20:46:45.437717"], ["updated_at", "2021-08-27 20:46:45.437717"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 3]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Load (0.1ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 1]]
+  [1m[36mComment Destroy (0.1ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 2]]
+  [1m[36mComment Destroy (0.0ms)[0m  [1m[31mDELETE FROM "comments" WHERE "comments"."id" = ?[0m  [["id", 3]]
+  [1m[36mPost Update (0.1ms)[0m  [1m[33mUPDATE "posts" SET "updated_at" = ? WHERE "posts"."id" = ?[0m  [["updated_at", "2021-08-27 20:46:45.337718"], ["id", 1]]
+  [1m[36mComment Create (0.1ms)[0m  [1m[32mINSERT INTO "comments" ("id", "content", "post_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["id", 1], ["content", "foo"], ["post_id", 1], ["created_at", "2021-08-27 20:46:45.427588"], ["updated_at", "2021-08-27 20:46:45.427588"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshot_items"[0m
+  [1m[35m (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots"[0m
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "snapshots" WHERE "snapshots"."identifier" = ?[0m  [["identifier", "snapshot-1"]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_relationships
+------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+SnapshotItemTest: test_restore_item!
+------------------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mPost Update (0.3ms)[0m  [1m[33mUPDATE "posts" SET "a" = ?, "b" = ? WHERE "posts"."id" = ?[0m  [["a", 1], ["b", 3], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------
+SnapshotItemTest: test_validations
+----------------------------------
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_type" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" IS NULL AND "snapshot_items"."snapshot_id" IS NULL AND "snapshot_items"."item_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" WHERE "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Post"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_id" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_type" = ? LIMIT ?[0m  [["item_id", 1], ["snapshot_id", 1], ["item_type", "Foobar"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshot_items" WHERE "snapshot_items"."item_type" = ? AND "snapshot_items"."snapshot_id" = ? AND "snapshot_items"."item_id" = ? LIMIT ?[0m  [["item_type", "Foobar"], ["snapshot_id", 1], ["item_id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------
+SnapshotItemTest: test_object
+-----------------------------
+  [1m[36mActiveSnapshot::Snapshot Load (0.1ms)[0m  [1m[34mSELECT "snapshots".* FROM "snapshots" ORDER BY "snapshots"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mActiveSnapshot::SnapshotItem Load (0.0ms)[0m  [1m[34mSELECT "snapshot_items".* FROM "snapshot_items" WHERE "snapshot_items"."snapshot_id" = ?[0m  [["snapshot_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------
+SnapshotsConcernTest: test_has_snapshot_children
+------------------------------------------------
+  [1m[36mPost Load (0.2ms)[0m  [1m[34mSELECT "posts".* FROM "posts" LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------
+SnapshotsConcernTest: test_relationships
+----------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+SnapshotsConcernTest: test_create_snapshot!
+-------------------------------------------
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" ORDER BY "posts"."id" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 1"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.3ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 1"], ["metadata", "---\n:foo: :bar\n"], ["created_at", "2021-08-27 20:46:45.472428"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.1ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.2ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,3,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.337718000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:46:45.337718000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.337718000 Z
+  zone: *1
+  time: 2021-08-27 20:46:45.337718000 Z
+','2021-08-27 20:46:45.475771',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 2"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 2"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:46:45.477983"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,4,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.337718000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:46:45.337718000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.337718000 Z
+  zone: *1
+  time: 2021-08-27 20:46:45.337718000 Z
+','2021-08-27 20:46:45.480667',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mActiveSnapshot::Snapshot Create (0.1ms)[0m  [1m[32mINSERT INTO "snapshots" ("item_type", "item_id", "identifier", "metadata", "created_at") VALUES (?, ?, ?, ?, ?)[0m  [["item_type", "Post"], ["item_id", 1], ["identifier", "foobar 3"], ["metadata", "--- {}\n"], ["created_at", "2021-08-27 20:46:45.482456"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mPost Load (0.0ms)[0m  [1m[34mSELECT "posts".* FROM "posts" WHERE "posts"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mComment Load (0.0ms)[0m  [1m[34mSELECT "comments".* FROM "comments" WHERE "comments"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mNote Load (0.0ms)[0m  [1m[34mSELECT "notes".* FROM "notes" WHERE "notes"."post_id" = ?[0m  [["post_id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::SnapshotItem Create Many (0.1ms)[0m  [1m[32mINSERT INTO "snapshot_items" ("id","snapshot_id","item_type","item_id","object","created_at","child_group_name") VALUES (NULL,5,'Post',1,'---
+id: 1
+a: 2
+b: 4
+created_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.337718000 Z
+  zone: &1 !ruby/object:ActiveSupport::TimeZone
+    name: Etc/UTC
+  time: 2021-08-27 20:46:45.337718000 Z
+updated_at: !ruby/object:ActiveSupport::TimeWithZone
+  utc: 2021-08-27 20:46:45.337718000 Z
+  zone: *1
+  time: 2021-08-27 20:46:45.337718000 Z
+','2021-08-27 20:46:45.485020',NULL)[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mActiveSnapshot::Snapshot Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "snapshots" WHERE "snapshots"."identifier" = ? AND "snapshots"."item_id" = ? AND "snapshots"."item_type" = ? LIMIT ?[0m  [["identifier", "foobar 3"], ["item_id", 1], ["item_type", "Post"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
